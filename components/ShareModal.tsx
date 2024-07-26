@@ -15,6 +15,7 @@ import { Input } from "./ui/input";
 import UserTypeSelector from "./UserTypeSelector";
 import { setUser } from "@sentry/nextjs";
 import Collaborator from "./Collaborator";
+import { updateDocumentAccess } from "@/lib/actions/room.actions";
 
 const ShareModal = ({
   roomId,
@@ -30,12 +31,21 @@ const ShareModal = ({
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState<UserType>("viewer");
 
-  const shareDocumentHendler = async () => {};
+  const shareDocumentHendler = async () => {
+    setLoading(true)
+    await updateDocumentAccess({
+        roomId, 
+        email, 
+        userType: userType as UserType, 
+        updatedBy: user.info
+    })
+    setLoading(false)
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button className="gradiant-blue flex h-9 gap-1 px-4" disabled={currentUserType !== 'editor'}>
+        <Button className="gradient-blue flex h-9 gap-1 px-4" disabled={currentUserType !== 'editor'}>
             <Image src="/assets/icons/share.svg" alt={"share"} width={20} height={20} className="min-w-4 md:size-5" />
             <p className="mr-1 hidden sm:block">Share</p>
         </Button>
@@ -57,7 +67,7 @@ const ShareModal = ({
                     className="share-input"/>
                     <UserTypeSelector userType={userType} setUserType={setUserType}/>
             </div>
-            <Button  type="submit" className="gradient-blue flex h-full gap-1 px-5" disabled={loading}>
+            <Button  type="submit" className="gradient-blue flex h-full gap-1 px-5" disabled={loading} onClick={shareDocumentHendler}>
                 {loading ? 'Sending...' : 'Invite'}
             </Button>
         </div>
