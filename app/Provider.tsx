@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React from "react";
 import {
   LiveblocksProvider,
   RoomProvider,
@@ -27,7 +27,6 @@ const Provider = ( {children} : { children : React.ReactNode })  => {
               currentUser: clerkUser?.emailAddresses[0].emailAddress!,
               text
             })
-
             return roomUsers
         }}
     >
